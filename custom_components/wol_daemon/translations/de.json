@@ -113,6 +113,9 @@
     "switch": {
       "power": {
         "name": "Strom"
+      },
+      "skip_next": {
+        "name": "Nächste geplante Aktion auslassen"
       }
     }
   }

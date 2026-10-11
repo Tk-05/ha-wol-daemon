@@ -72,8 +72,8 @@ class WolDaemonClient:
             raise WolDaemonError(f"{path} answered HTTP {status}: {_error_text(body)}")
         return body
 
-    async def _action(self, path: str) -> dict[str, Any] | None:
-        status, body = await self._request("POST", path)
+    async def _action(self, path: str, method: str = "POST") -> dict[str, Any] | None:
+        status, body = await self._request(method, path)
         if status in (200, 202):
             return body
         raise WolDaemonActionError(_error_text(body))
@@ -125,6 +125,11 @@ class WolDaemonClient:
     async def cluster_action(self, key: str, action: str) -> dict[str, Any] | None:
         """action: on or off. The daemon runs the sequence in the background."""
         return await self._action(f"/api/clusters/{key}/action/{action}")
+
+    async def skip_next_run(self, kind: str, key: str, skip: bool) -> dict[str, Any] | None:
+        """kind: machines or clusters. Skips (or un-skips) the next scheduled run and
+        returns the updated next_action."""
+        return await self._action(f"/api/{kind}/{key}/skip-next", "POST" if skip else "DELETE")
 
 
 def _error_text(body: Any) -> str:

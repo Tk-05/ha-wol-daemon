@@ -113,6 +113,9 @@
     "switch": {
       "power": {
         "name": "Power"
+      },
+      "skip_next": {
+        "name": "Skip next scheduled action"
       }
     }
   }
