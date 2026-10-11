@@ -30,6 +30,16 @@
           "url": "Adresse der Web-Oberfläche des Daemons, z. B. http://192.168.1.5:9090",
           "api_key": "Wird beim Anlegen in den Daemon-Einstellungen einmalig angezeigt."
         }
+      },
+      "zeroconf_confirm": {
+        "title": "WOL Daemon gefunden",
+        "description": "Unter {url} wurde ein WOL Daemon gefunden. Lege in seiner Web-Oberfläche unter Settings → API keys einen API-Key an und gib ihn hier ein. Mit Zugriff „Control“ kannst du Maschinen auch wecken, herunterfahren und neu starten; ein „Read only“-Key liefert nur den Status.",
+        "data": {
+          "api_key": "API-Key"
+        },
+        "data_description": {
+          "api_key": "Wird beim Anlegen in den Daemon-Einstellungen einmalig angezeigt."
+        }
       }
     },
     "error": {
@@ -41,8 +51,10 @@
       "already_configured": "Dieser Daemon ist bereits eingerichtet.",
       "reauth_successful": "API-Key aktualisiert.",
       "reconfigure_successful": "Verbindung aktualisiert.",
-      "wrong_daemon": "Das ist ein anderer WOL Daemon als der hier eingerichtete."
-    }
+      "wrong_daemon": "Das ist ein anderer WOL Daemon als der hier eingerichtete.",
+      "not_wol_daemon": "Das gefundene Gerät scheint kein WOL Daemon zu sein."
+    },
+    "flow_title": "{name}"
   },
   "options": {
     "step": {

@@ -19,5 +19,6 @@ async def async_get_config_entry_diagnostics(hass: HomeAssistant, entry: WolDaem
     return {
         "entry": async_redact_data({"data": dict(entry.data), "options": dict(entry.options)}, TO_REDACT),
         "info": asdict(coordinator.info),
+        "event_stream_connected": coordinator.event_listener.connected,
         "data": async_redact_data(asdict(coordinator.data), TO_REDACT),
     }

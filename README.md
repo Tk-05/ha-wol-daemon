@@ -19,6 +19,10 @@ as type *Integration*, then install **WOL Daemon** and restart Home Assistant.
 
 ## Setup
 
+If the daemon is on the same network, Home Assistant finds it by itself: it shows up under
+**Settings → Devices & services → Discovered**, and you only need to enter an API key
+(step 1). Otherwise:
+
 1. In the daemon's web UI, go to **Settings → API keys** and create a key named e.g.
    "Home Assistant". Pick **Control** access to be able to switch machines from Home
    Assistant; a **Read only** key gives you just the status entities.
@@ -31,6 +35,17 @@ the key is revoked, Home Assistant asks for a new one.
 
 Under *Configure* you can change the polling interval (default 30 seconds). Every poll
 makes the daemon ping all machines, so there's no point in going much lower.
+
+## Updates
+
+The integration keeps a connection to the daemon's event stream open, so actions
+(from Home Assistant, the daemon's web UI or its schedule), their results and changes to
+machines, clusters and schedules show up right away. Polling stays on for the online
+status, which also catches machines switched on or off by hand. With an older daemon
+without the event stream, everything works by polling alone.
+
+If the daemon's address changes, discovery updates it, as long as it was set up with an
+IP address (a host name or reverse-proxy URL is left as entered).
 
 ## Entities
 

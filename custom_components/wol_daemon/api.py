@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import json
+from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from typing import Any
 
 import aiohttp
 
-from .const import REQUEST_TIMEOUT_MARGIN
+from .const import EVENTS_READ_TIMEOUT, REQUEST_TIMEOUT_MARGIN
 
 
 class WolDaemonError(Exception):
@@ -20,6 +22,10 @@ class WolDaemonAuthError(WolDaemonError):
 
 class WolDaemonActionError(WolDaemonError):
     """The daemon refused or failed an action; the message is its reason."""
+
+
+class WolDaemonEventsUnsupported(WolDaemonError):
+    """The daemon has no /api/events yet (older version); polling still works."""
 
 
 @dataclass(frozen=True)
@@ -90,6 +96,27 @@ class WolDaemonClient:
 
     async def get_clusters(self) -> list[dict[str, Any]]:
         return (await self._get("/api/clusters"))["clusters"]
+
+    async def events(self) -> AsyncIterator[dict[str, Any]]:
+        """Yields the daemon's change notifications (see /api/events) until the stream ends."""
+        timeout = aiohttp.ClientTimeout(total=None, sock_connect=10, sock_read=EVENTS_READ_TIMEOUT)
+        try:
+            async with self._session.get(self._url + "/api/events", headers=self._headers, timeout=timeout) as response:
+                if response.status == 401:
+                    raise WolDaemonAuthError("API key rejected")
+                if response.status == 404:
+                    raise WolDaemonEventsUnsupported("The daemon doesn't offer /api/events")
+                if response.status != 200:
+                    raise WolDaemonError(f"/api/events answered HTTP {response.status}")
+                async for raw_line in response.content:
+                    line = raw_line.decode("utf-8").rstrip("\r\n")
+                    if line.startswith("data:"):
+                        try:
+                            yield json.loads(line[5:].strip())
+                        except ValueError:
+                            continue
+        except (aiohttp.ClientError, TimeoutError) as err:
+            raise WolDaemonError(f"Event stream from {self._url} broke off: {err or type(err).__name__}") from err
 
     async def machine_action(self, key: str, action: str) -> dict[str, Any] | None:
         """action: on, off or reboot. Returns the recorded action (result ok or skipped)."""
