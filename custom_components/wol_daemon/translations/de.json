@@ -1,0 +1,107 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Mit WOL Daemon verbinden",
+        "description": "Lege in der Web-Oberfläche des Daemons unter Settings → API keys einen API-Key an. Mit Zugriff „Control“ kannst du Maschinen auch wecken, herunterfahren und neu starten; ein „Read only“-Key liefert nur den Status.",
+        "data": {
+          "url": "URL",
+          "api_key": "API-Key"
+        },
+        "data_description": {
+          "url": "Adresse der Web-Oberfläche des Daemons, z. B. http://192.168.1.5:9090",
+          "api_key": "Wird beim Anlegen in den Daemon-Einstellungen einmalig angezeigt."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Neuer API-Key",
+        "description": "Der Daemon unter {url} akzeptiert den API-Key nicht mehr. Lege unter Settings → API keys einen neuen an.",
+        "data": {
+          "api_key": "API-Key"
+        }
+      },
+      "reconfigure": {
+        "title": "Verbindung ändern",
+        "data": {
+          "url": "URL",
+          "api_key": "API-Key"
+        },
+        "data_description": {
+          "url": "Adresse der Web-Oberfläche des Daemons, z. B. http://192.168.1.5:9090",
+          "api_key": "Wird beim Anlegen in den Daemon-Einstellungen einmalig angezeigt."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Daemon nicht erreichbar. Prüfe die URL und ob der Daemon aktuell ist (er braucht /api/info).",
+      "invalid_auth": "Der Daemon hat den API-Key abgelehnt.",
+      "unknown": "Unerwarteter Fehler, siehe Log."
+    },
+    "abort": {
+      "already_configured": "Dieser Daemon ist bereits eingerichtet.",
+      "reauth_successful": "API-Key aktualisiert.",
+      "reconfigure_successful": "Verbindung aktualisiert.",
+      "wrong_daemon": "Das ist ein anderer WOL Daemon als der hier eingerichtete."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Abfrageintervall (Sekunden)"
+        },
+        "data_description": {
+          "scan_interval": "Jede Abfrage pingt alle Maschinen; 30–60 Sekunden reichen."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "online": {
+        "name": "Online"
+      }
+    },
+    "button": {
+      "wake": {
+        "name": "Wecken"
+      },
+      "shut_down": {
+        "name": "Herunterfahren"
+      },
+      "reboot": {
+        "name": "Neustart"
+      },
+      "wake_all": {
+        "name": "Alle wecken"
+      },
+      "shut_down_all": {
+        "name": "Alle herunterfahren"
+      }
+    },
+    "sensor": {
+      "last_action": {
+        "name": "Letzte Aktion"
+      },
+      "next_action": {
+        "name": "Nächste geplante Aktion"
+      },
+      "cluster_state": {
+        "name": "Zustand",
+        "state": {
+          "on": "Alle an",
+          "off": "Alle aus",
+          "partial": "Teilweise an"
+        }
+      },
+      "members_online": {
+        "name": "Maschinen online"
+      }
+    },
+    "switch": {
+      "power": {
+        "name": "Strom"
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "entity": {
+    "button": {
+      "wake": { "default": "mdi:power" },
+      "shut_down": { "default": "mdi:power-off" },
+      "wake_all": { "default": "mdi:power" },
+      "shut_down_all": { "default": "mdi:power-off" }
+    },
+    "sensor": {
+      "last_action": { "default": "mdi:history" },
+      "next_action": { "default": "mdi:calendar-clock" },
+      "cluster_state": {
+        "default": "mdi:server-network",
+        "state": { "off": "mdi:server-network-off" }
+      },
+      "members_online": { "default": "mdi:server" }
+    },
+    "switch": {
+      "power": {
+        "default": "mdi:power",
+        "state": { "off": "mdi:power-off" }
+      }
+    }
+  }
+}

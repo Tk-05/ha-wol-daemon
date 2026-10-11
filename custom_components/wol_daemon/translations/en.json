@@ -1,0 +1,107 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to WOL Daemon",
+        "description": "Create an API key under Settings → API keys in the daemon's web UI. With Control access you can also wake, shut down and reboot; a Read only key gives you just the status.",
+        "data": {
+          "url": "URL",
+          "api_key": "API key"
+        },
+        "data_description": {
+          "url": "Address of the daemon's web UI, e.g. http://192.168.1.5:9090",
+          "api_key": "Shown once when you create it in the daemon's settings."
+        }
+      },
+      "reauth_confirm": {
+        "title": "New API key",
+        "description": "The daemon at {url} no longer accepts the API key. Create a new one under Settings → API keys.",
+        "data": {
+          "api_key": "API key"
+        }
+      },
+      "reconfigure": {
+        "title": "Change connection",
+        "data": {
+          "url": "URL",
+          "api_key": "API key"
+        },
+        "data_description": {
+          "url": "Address of the daemon's web UI, e.g. http://192.168.1.5:9090",
+          "api_key": "Shown once when you create it in the daemon's settings."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Can't reach the daemon. Check the URL and that the daemon is up to date (it needs /api/info).",
+      "invalid_auth": "The daemon rejected the API key.",
+      "unknown": "Unexpected error, see the log."
+    },
+    "abort": {
+      "already_configured": "This daemon is already set up.",
+      "reauth_successful": "API key updated.",
+      "reconfigure_successful": "Connection updated.",
+      "wrong_daemon": "That's a different WOL Daemon than the one set up here."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "scan_interval": "Polling interval (seconds)"
+        },
+        "data_description": {
+          "scan_interval": "Every poll pings all machines; 30–60 seconds is plenty."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "online": {
+        "name": "Online"
+      }
+    },
+    "button": {
+      "wake": {
+        "name": "Wake"
+      },
+      "shut_down": {
+        "name": "Shut down"
+      },
+      "reboot": {
+        "name": "Reboot"
+      },
+      "wake_all": {
+        "name": "Wake all"
+      },
+      "shut_down_all": {
+        "name": "Shut down all"
+      }
+    },
+    "sensor": {
+      "last_action": {
+        "name": "Last action"
+      },
+      "next_action": {
+        "name": "Next scheduled action"
+      },
+      "cluster_state": {
+        "name": "State",
+        "state": {
+          "on": "All on",
+          "off": "All off",
+          "partial": "Partially on"
+        }
+      },
+      "members_online": {
+        "name": "Machines online"
+      }
+    },
+    "switch": {
+      "power": {
+        "name": "Power"
+      }
+    }
+  }
+}
