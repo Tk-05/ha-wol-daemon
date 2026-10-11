@@ -84,9 +84,11 @@ Actions show up in the daemon's event log with the source `api:<key name>`.
 
 ## Releasing
 
-Bump `version` in `custom_components/wol_daemon/manifest.json`, merge, then tag that
-commit (`git tag v0.3.0 && git push origin v0.3.0`). The Release workflow checks the tag
-against the manifest and publishes the GitHub release that HACS offers as an update.
+Bump `version` in `custom_components/wol_daemon/manifest.json` and merge. Then either
+start **Actions → Release → Run workflow** on `main`, which tags the commit with that
+version, or push the tag yourself (`git tag v0.3.0 && git push origin v0.3.0`; it has to
+match the manifest). Either way the workflow publishes the GitHub release that HACS
+offers as an update.
 
 ## Development
 
