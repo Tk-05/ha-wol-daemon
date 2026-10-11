@@ -82,6 +82,12 @@ from Home Assistant on the next poll.
 
 Actions show up in the daemon's event log with the source `api:<key name>`.
 
+## Releasing
+
+Bump `version` in `custom_components/wol_daemon/manifest.json`, merge, then tag that
+commit (`git tag v0.3.0 && git push origin v0.3.0`). The Release workflow checks the tag
+against the manifest and publishes the GitHub release that HACS offers as an update.
+
 ## Development
 
 ```sh

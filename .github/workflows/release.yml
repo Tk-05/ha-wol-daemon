@@ -1,0 +1,29 @@
+name: Release
+
+# Pushing a tag like v0.2.0 publishes a GitHub release for it, which is what HACS offers
+# as versions (without releases it can only install the latest commit).
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the tag matches manifest.json
+        run: |
+          manifest=$(python3 -c 'import json; print(json.load(open("custom_components/wol_daemon/manifest.json"))["version"])')
+          if [ "v$manifest" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match version $manifest in manifest.json"
+            exit 1
+          fi
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes --verify-tag
