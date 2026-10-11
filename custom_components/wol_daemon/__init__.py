@@ -9,6 +9,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import WolDaemonAuthError, WolDaemonClient, WolDaemonError
+from .const import DOMAIN
 from .coordinator import WolDaemonConfigEntry, WolDaemonCoordinator
 from .entity import cluster_identifier, hub_identifier, machine_identifier
 
@@ -41,6 +42,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: WolDaemonConfigEntry) ->
     entry.async_on_unload(coordinator.async_add_listener(lambda: remove_stale_devices(hass, entry)))
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    entry.async_create_background_task(hass, coordinator.event_listener.run(), f"{DOMAIN} events {entry.title}")
     return True
 
 

@@ -15,6 +15,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .api import DaemonInfo, WolDaemonAuthError, WolDaemonClient, WolDaemonError
 from .const import CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, DOMAIN
+from .events import EventListener
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ class WolDaemonCoordinator(DataUpdateCoordinator[WolDaemonData]):
         )
         self.client = client
         self.info = info
+        self.event_listener = EventListener(self)
 
     async def _async_update_data(self) -> WolDaemonData:
         try:

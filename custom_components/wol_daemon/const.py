@@ -17,3 +17,10 @@ PENDING_STATE_DURATION = timedelta(minutes=5)
 # The daemon pings every machine on each status request; it needs up to
 # status_timeout_seconds (from /api/info) for an offline one, plus this margin.
 REQUEST_TIMEOUT_MARGIN = 10
+
+# The daemon sends a keepalive every 15 s on /api/events; silence for longer than this means
+# the connection is dead.
+EVENTS_READ_TIMEOUT = 45
+# Waits between reconnect attempts to /api/events, doubling up to the maximum.
+EVENTS_RETRY_MIN = 5
+EVENTS_RETRY_MAX = 300

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import json
 from typing import Any
 
 import pytest
@@ -82,6 +83,9 @@ def daemon(aioclient_mock: AiohttpClientMocker):
             self.machines: list[dict[str, Any]] = copy.deepcopy(MACHINES)
             self.clusters: list[dict[str, Any]] = copy.deepcopy(CLUSTERS)
             self.status = 200
+            # What one connection to /api/events delivers before the stream ends.
+            self.events: list[dict[str, Any]] = [{"type": "hello", "instance_id": INSTANCE_ID}]
+            self.events_status = 200
 
         def mock(self) -> None:
             aioclient_mock.clear_requests()
@@ -89,6 +93,11 @@ def daemon(aioclient_mock: AiohttpClientMocker):
             aioclient_mock.get(f"{URL}/api/info", status=self.status, json=body or self.info)
             aioclient_mock.get(f"{URL}/api/machines", status=self.status, json=body or {"machines": self.machines})
             aioclient_mock.get(f"{URL}/api/clusters", status=self.status, json=body or {"clusters": self.clusters})
+            stream = "".join(f"event: {e['type']}\ndata: {json.dumps(e)}\n\n" for e in self.events)
+            aioclient_mock.get(f"{URL}/api/events", status=self.events_status, text=stream)
+
+        def calls(self, path: str) -> int:
+            return sum(1 for _, url, *_ in aioclient_mock.mock_calls if str(url) == f"{URL}{path}")
 
     fake = FakeDaemon()
     fake.mock()
