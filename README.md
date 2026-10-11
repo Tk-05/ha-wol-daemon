@@ -7,6 +7,8 @@ buttons and a switch to wake, shut down and reboot it.
 ## Requirements
 
 - WOL Daemon with named API keys (Settings → **API keys**) and the `/api/info` endpoint.
+  The skip switches need a daemon with `/api/.../skip-next`; with an older one, switching
+  them shows an error.
 - Home Assistant 2025.8 or newer.
 
 ## Installation
@@ -60,9 +62,16 @@ from other integrations, e.g. your router):
 | `button.<machine>_shut_down`, `button.<machine>_reboot` | via Proxmox or SSH (*) |
 | `sensor.<machine>_last_action` | time of the last wake/shutdown; action, source, result and detail as attributes |
 | `sensor.<machine>_next_scheduled_action` | time of the next schedule rule; rule, action and whether it will be skipped as attributes |
+| `switch.<machine>_skip_next_scheduled_action` | on = the next scheduled run is skipped (*) |
 
-(*) Only for machines with a shutdown method; wake-only machines just get the wake button.
-Switches and buttons need a key with Control access.
+(*) The power switch, shutdown and reboot are only there for machines with a shutdown
+method; wake-only machines just get the wake button. Switches and buttons need a key with
+Control access.
+
+The skip switch skips exactly the run that the next-scheduled-action sensor shows,
+whichever rule it belongs to, like **Skip next** in the daemon's web UI. Once that run's
+time has passed, the switch is off again and refers to the following run. Without any
+schedule rules it's unavailable.
 
 Waking or shutting down takes a while, so after switching, the power switch shows the
 requested state (attribute `switching: true`) until the machine gets there, for at most
@@ -76,6 +85,7 @@ requested state (attribute `switching: true`) until the machine gets there, for 
 | `sensor.<cluster>_machines_online` | number of members online; `total` and each member's status as attributes |
 | `button.<cluster>_wake_all`, `button.<cluster>_shut_down_all` | runs the cluster's sequence in the daemon |
 | `sensor.<cluster>_last_action`, `sensor.<cluster>_next_scheduled_action` | as for machines |
+| `switch.<cluster>_skip_next_scheduled_action` | as for machines |
 
 Machines and clusters added in the daemon appear automatically; deleted ones are removed
 from Home Assistant on the next poll.
