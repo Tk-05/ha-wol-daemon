@@ -23,8 +23,9 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
-          # No icon in the home-assistant/brands repo (yet).
-          ignore: brands
+          # brands: no icon in the home-assistant/brands repo (yet).
+          # license: deliberately unlicensed for now.
+          ignore: brands license
 
   tests:
     runs-on: ubuntu-latest
